@@ -1,0 +1,22 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  min-height: 100vh;
+  padding: 20px;
+}
+
+:root {
+  --pastel-pink: #ffb6c1;
+  --pastel-blue: #aec6cf;
+  --pastel-yellow: #fffacd;
+  --pastel-green: #98d8aa;
+  --pastel-purple: #dda0dd;
+  --pastel-orange: #ffcc99;
+  --pastel-red: #ff9999;
+}
