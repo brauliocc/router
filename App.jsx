@@ -173,10 +173,12 @@ function App() {
           >
             {task.completed ? '✓' : '○'}
           </button>
-          <span className="task-name">{task.name}</span>
-          {isDaily && (
-            <span className="streak">🔥 {task.streak}</span>
-          )}
+          <span className="task-name">
+            {task.name}
+            {isDaily && (
+              <span className="streak-inline"> ({task.streak} 🔥)</span>
+            )}
+          </span>
           {!isDaily && (
             <span className="weekly-progress">
               {task.completed ? '✅ Done this week' : '⏳ Pending'}
