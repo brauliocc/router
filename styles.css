@@ -141,7 +141,21 @@ header h1 {
 
 .alternatives {
   margin-top: 12px; padding-top: 12px; border-top: 1px dashed #ddd;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.alt-list {
   display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+}
+.add-alt-form {
+  display: flex; gap: 5px; align-items: center;
+}
+.add-alt-form input {
+  flex: 1; padding: 5px 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.85rem;
+}
+.add-alt-btn {
+  background: var(--pastel-green); border: none; width: 28px; height: 28px; 
+  border-radius: 50%; cursor: pointer; font-weight: bold; display: flex; 
+  align-items: center; justify-content: center;
 }
 .alt-btn { background: var(--pastel-orange); border: none; padding: 6px 12px; border-radius: 15px; cursor: pointer; font-size: 0.9rem; }
 

@@ -41,8 +41,14 @@ function renderList(elementId, tasks, isDaily) {
                 <button class="delete-btn" onclick="remove(${task.id}, ${isDaily})">✕</button>
             </div>
             <div id="alts-${task.id}" class="alternatives hidden">
-                <span>Swap with:</span>
-                ${task.alternatives.map(alt => `<button class="alt-btn" onclick="swap(${task.id}, ${isDaily}, '${alt}')">${alt}</button>`).join('')}
+                <div class="alt-list">
+                    <span>Swap with:</span>
+                    ${task.alternatives.map(alt => `<button class="alt-btn" onclick="swap(${task.id}, ${isDaily}, '${alt}')">${alt}</button>`).join('')}
+                </div>
+                <div class="add-alt-form">
+                    <input type="text" id="new-alt-input-${task.id}" placeholder="New alt...">
+                    <button class="add-alt-btn" onclick="addAlternative(${task.id}, ${isDaily})">+</button>
+                </div>
             </div>
         `;
         list.appendChild(card);
@@ -85,6 +91,21 @@ window.swap = (id, isDaily, newName) => {
     t.alternatives = t.alternatives.filter(x => x !== newName);
     t.alternatives.push(oldName);
     save(); render();
+};
+
+window.addAlternative = (id, isDaily) => {
+    const input = document.getElementById(`new-alt-input-${id}`);
+    const newAlt = input.value.trim();
+    if (newAlt) {
+        let tasks = isDaily ? dailyTasks : weeklyTasks;
+        let t = tasks.find(x => x.id === id);
+        if (!t.alternatives.includes(newAlt) && t.name !== newAlt) {
+            t.alternatives.push(newAlt);
+            save(); render();
+            // Re-open alts after render
+            toggleAlts(id, isDaily);
+        }
+    }
 };
 
 document.getElementById('addDailyBtn').onclick = () => document.getElementById('dailyAddForm').classList.toggle('hidden');
