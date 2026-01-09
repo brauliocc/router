@@ -112,6 +112,32 @@ header h1 {
   border-color: var(--pastel-green);
 }
 
+.move-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.move-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: #aaa;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.move-btn:hover:not(:disabled) {
+  color: var(--pastel-purple);
+}
+
+.move-btn:disabled {
+  opacity: 0.2;
+  cursor: default;
+}
+
 .task-main {
   display: flex;
   align-items: center;

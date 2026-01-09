@@ -127,12 +127,46 @@ function App() {
     }
   }
 
-  const TaskCard = ({ task, isDaily, onToggle, onSwap, onDelete }) => {
+  const moveTask = (id, isDaily, direction) => {
+    const tasks = isDaily ? [...dailyTasks] : [...weeklyTasks]
+    const index = tasks.findIndex(t => t.id === id)
+    if (index === -1) return
+    
+    const newIndex = index + direction
+    if (newIndex < 0 || newIndex >= tasks.length) return
+    
+    const [movedTask] = tasks.splice(index, 1)
+    tasks.splice(newIndex, 0, movedTask)
+    
+    if (isDaily) {
+      setDailyTasks(tasks)
+    } else {
+      setWeeklyTasks(tasks)
+    }
+  }
+
+  const TaskCard = ({ task, isDaily, onToggle, onSwap, onDelete, onMove, isFirst, isLast }) => {
     const [showAlts, setShowAlts] = useState(false)
     
     return (
       <div className={`task-card ${task.completed ? 'completed' : ''}`}>
         <div className="task-main">
+          <div className="move-controls">
+            <button 
+              className="move-btn" 
+              onClick={() => onMove(task.id, isDaily, -1)}
+              disabled={isFirst}
+            >
+              ▲
+            </button>
+            <button 
+              className="move-btn" 
+              onClick={() => onMove(task.id, isDaily, 1)}
+              disabled={isLast}
+            >
+              ▼
+            </button>
+          </div>
           <button 
             className={`check-btn ${task.completed ? 'checked' : ''}`}
             onClick={() => onToggle(task.id)}
@@ -140,7 +174,7 @@ function App() {
             {task.completed ? '✓' : '○'}
           </button>
           <span className="task-name">{task.name}</span>
-          {isDaily && task.streak > 0 && (
+          {isDaily && (
             <span className="streak">🔥 {task.streak}</span>
           )}
           {!isDaily && (
@@ -207,7 +241,7 @@ function App() {
         )}
 
         <div className="tasks-list">
-          {dailyTasks.map(task => (
+          {dailyTasks.map((task, index) => (
             <TaskCard 
               key={task.id} 
               task={task} 
@@ -215,6 +249,9 @@ function App() {
               onToggle={toggleDailyTask}
               onSwap={swapAlternative}
               onDelete={deleteTask}
+              onMove={moveTask}
+              isFirst={index === 0}
+              isLast={index === dailyTasks.length - 1}
             />
           ))}
         </div>
@@ -247,7 +284,7 @@ function App() {
         )}
 
         <div className="tasks-list">
-          {weeklyTasks.map(task => (
+          {weeklyTasks.map((task, index) => (
             <TaskCard 
               key={task.id} 
               task={task} 
@@ -255,6 +292,9 @@ function App() {
               onToggle={toggleWeeklyTask}
               onSwap={swapAlternative}
               onDelete={deleteTask}
+              onMove={moveTask}
+              isFirst={index === 0}
+              isLast={index === weeklyTasks.length - 1}
             />
           ))}
         </div>
