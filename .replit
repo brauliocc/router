@@ -1,4 +1,4 @@
-modules = ["nodejs-20"]
+modules = ["nodejs-20", "python-3.11"]
 [agent]
 expertMode = true
 
@@ -15,15 +15,15 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Start application"
+args = "Preview App"
 
 [[workflows.workflow]]
-name = "Start application"
+name = "Preview App"
 author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "npm run dev"
+args = "python3 -m http.server 5000"
 waitForPort = 5000
 
 [workflows.workflow.metadata]
@@ -32,10 +32,6 @@ outputType = "webview"
 [[ports]]
 localPort = 5000
 externalPort = 80
-
-[[ports]]
-localPort = 5001
-externalPort = 3002
 
 [deployment]
 deploymentTarget = "static"

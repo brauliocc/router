@@ -1,13 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Router - Daily Routine</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/main.jsx"></script>
-  </body>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app">
+        <header>
+            <h1>🗓️ Router</h1>
+            <p class="subtitle">Your Daily Routine Tracker</p>
+        </header>
+
+        <section class="section daily-section">
+            <div class="section-header">
+                <h2>📅 Daily Tasks</h2>
+                <button class="add-btn" id="addDailyBtn">+ Add</button>
+            </div>
+            <div id="dailyAddForm" class="add-form hidden">
+                <input type="text" id="dailyTaskName" placeholder="Task name">
+                <input type="text" id="dailyTaskAlts" placeholder="Alternatives (comma separated)">
+                <button id="saveDailyBtn">Add Task</button>
+            </div>
+            <div id="dailyTasksList" class="tasks-list"></div>
+        </section>
+
+        <section class="section weekly-section">
+            <div class="section-header">
+                <h2>📆 Weekly Tasks</h2>
+                <button class="add-btn" id="addWeeklyBtn">+ Add</button>
+            </div>
+            <div id="weeklyAddForm" class="add-form hidden">
+                <input type="text" id="weeklyTaskName" placeholder="Task name">
+                <input type="text" id="weeklyTaskAlts" placeholder="Alternatives (comma separated)">
+                <button id="saveWeeklyBtn">Add Task</button>
+            </div>
+            <div id="weeklyTasksList" class="tasks-list"></div>
+        </section>
+
+        <footer>
+            <p>Keep your streak going! 🔥</p>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+</body>
 </html>
