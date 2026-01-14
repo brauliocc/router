@@ -40,6 +40,32 @@ header h1 {
 .subtitle {
   color: #7d6e8d;
   font-size: 1.1rem;
+  margin-bottom: 15px;
+}
+
+.date-navigator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 10px;
+  border-radius: 15px;
+}
+
+.date-navigator button {
+  background: var(--pastel-purple);
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  color: white;
+}
+
+#currentDateDisplay {
+  font-weight: bold;
+  color: #5d4e6d;
 }
 
 .section {
@@ -141,22 +167,35 @@ header h1 {
 
 .alternatives {
   margin-top: 12px; padding-top: 12px; border-top: 1px dashed #ddd;
-  display: flex; flex-direction: column; gap: 10px;
 }
+
+.alt-header {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.alt-header input {
+    flex: 1;
+    padding: 4px 8px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.alt-header button {
+    background: var(--pastel-blue);
+    border: none;
+    padding: 4px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
 .alt-list {
-  display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
 }
-.add-alt-form {
-  display: flex; gap: 5px; align-items: center;
-}
-.add-alt-form input {
-  flex: 1; padding: 5px 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.85rem;
-}
-.add-alt-btn {
-  background: var(--pastel-green); border: none; width: 28px; height: 28px; 
-  border-radius: 50%; cursor: pointer; font-weight: bold; display: flex; 
-  align-items: center; justify-content: center;
-}
+
 .alt-btn { background: var(--pastel-orange); border: none; padding: 6px 12px; border-radius: 15px; cursor: pointer; font-size: 0.9rem; }
 
 footer { text-align: center; margin-top: 30px; color: #7d6e8d; }

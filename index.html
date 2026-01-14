@@ -11,6 +11,11 @@
         <header>
             <h1>🗓️ Router</h1>
             <p class="subtitle">Your Daily Routine Tracker</p>
+            <div class="date-navigator">
+                <button onclick="changeDate(-1)">◀</button>
+                <span id="currentDateDisplay"></span>
+                <button onclick="changeDate(1)">▶</button>
+            </div>
         </header>
 
         <section class="section daily-section">
