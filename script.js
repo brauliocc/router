@@ -1,12 +1,30 @@
-let dailyTasks = JSON.parse(localStorage.getItem('dailyTasks')) || [
+const DEFAULT_DAILY = [
     { id: 1, name: 'Workout', alternatives: ['Gym', 'Yoga'], completed: {}, streak: 0 },
     { id: 2, name: 'Read', alternatives: ['Book', 'Kindle'], completed: {}, streak: 0 }
 ];
 
-let weeklyTasks = JSON.parse(localStorage.getItem('weeklyTasks')) || [
+const DEFAULT_WEEKLY = [
     { id: 101, name: 'Go out', alternatives: ['Dinner', 'Movie'], completed: {} }
 ];
 
+function loadTasks(key, defaultTasks) {
+    const saved = localStorage.getItem(key);
+    if (!saved) return defaultTasks;
+    try {
+        const parsed = JSON.parse(saved);
+        // Merge with defaults to ensure structure is correct if user had old data
+        return parsed.map(task => ({
+            ...defaultTasks.find(d => d.id === task.id),
+            ...task,
+            completed: task.completed || {}
+        }));
+    } catch (e) {
+        return defaultTasks;
+    }
+}
+
+let dailyTasks = loadTasks('dailyTasks', DEFAULT_DAILY);
+let weeklyTasks = loadTasks('weeklyTasks', DEFAULT_WEEKLY);
 let currentDate = new Date();
 
 function getDayKey(date) {
@@ -22,14 +40,50 @@ function getWeekKey(date) {
     return `${d.getFullYear()}-W${weekNo}`;
 }
 
+function calculateStreak(task) {
+    let streak = 0;
+    let checkDate = new Date(); // Start from today
+    checkDate.setHours(0, 0, 0, 0);
+
+    while (true) {
+        const key = getDayKey(checkDate);
+        if (task.completed[key]) {
+            streak++;
+            checkDate.setDate(checkDate.getDate() - 1);
+        } else {
+            // If not completed today, check yesterday
+            if (streak === 0) {
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+                const yesterdayKey = getDayKey(yesterday);
+                if (!task.completed[yesterdayKey]) return 0; // Broken
+                // If yesterday was completed, we continue checking from yesterday
+                checkDate.setDate(checkDate.getDate() - 1);
+                continue;
+            }
+            break; 
+        }
+    }
+    return streak;
+}
+
+// Update streaks for all tasks based on historical data
+function refreshStreaks() {
+    dailyTasks.forEach(task => {
+        task.streak = calculateStreak(task);
+    });
+}
+
 function save() {
     localStorage.setItem('dailyTasks', JSON.stringify(dailyTasks));
     localStorage.setItem('weeklyTasks', JSON.stringify(weeklyTasks));
 }
 
 function render() {
+    refreshStreaks();
     const dateStr = currentDate.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-    document.getElementById('currentDateDisplay').innerText = dateStr;
+    const display = document.getElementById('currentDateDisplay');
+    if (display) display.innerText = dateStr;
     
     renderList('dailyTasksList', dailyTasks, true);
     renderList('weeklyTasksList', weeklyTasks, false);
@@ -37,11 +91,12 @@ function render() {
 
 function renderList(elementId, tasks, isDaily) {
     const list = document.getElementById(elementId);
+    if (!list) return;
     list.innerHTML = '';
     const key = isDaily ? getDayKey(currentDate) : getWeekKey(currentDate);
     
     tasks.forEach((task, index) => {
-        const isCompleted = task.completed[key] || false;
+        const isCompleted = !!task.completed[key];
         const card = document.createElement('div');
         card.className = `task-card ${isCompleted ? 'completed' : ''}`;
         card.innerHTML = `
@@ -86,19 +141,7 @@ window.toggle = (id, isDaily) => {
     let t = tasks.find(x => x.id === id);
     const key = isDaily ? getDayKey(currentDate) : getWeekKey(currentDate);
     
-    const wasCompleted = !!t.completed[key];
-    t.completed[key] = !wasCompleted;
-    
-    if (isDaily) {
-        // Simple streak logic: check consecutive days backwards from today
-        // This is a bit complex for a real streak, but for this app we'll update it based on the action
-        if (t.completed[key]) {
-            t.streak++;
-        } else {
-            t.streak = Math.max(0, t.streak - 1);
-        }
-    }
-    
+    t.completed[key] = !t.completed[key];
     save(); render();
 };
 
